@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  
   // If deploying to a project page like https://<username>.github.io/my-portfolio,
   // uncomment and set the repo name below:
   // basePath: "/my-portfolio",
