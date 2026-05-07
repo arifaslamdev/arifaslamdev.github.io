@@ -376,21 +376,20 @@ export default function Contact() {
     setIsSubmitting(true);
 
     const form = e.currentTarget;
-    const formData = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      subject: (form.elements.namedItem("subject") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
-    };
+    const formData = new FormData(form);
+
+    // Add Web3Forms access key
+    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "your_web3forms_access_key_here");
+    formData.append("subject", `Portfolio Contact: ${formData.get("subject")}`);
+    formData.append("from_name", "Portfolio Contact Form");
 
     try {
-      const res = await fetch("/api/contact", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
       if (data.success) {
         setIsSubmitting(false);
@@ -405,7 +404,7 @@ export default function Contact() {
           description: data.message || "Please try again.",
         });
       }
-    } catch {
+    } catch (error) {
       setIsSubmitting(false);
       toast.error("Network error", {
         description: "Please check your connection and try again.",
