@@ -1,45 +1,150 @@
-"use client";
+import Image from "next/image";
+import ScrollAnimations from "@/components/ScrollAnimations";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  Calendar,
+  CheckCircle2,
+  Database,
+  ExternalLink,
+  Gauge,
+  Layers,
+  Lock,
+  Mail,
+  Quote,
+  RefreshCw,
+  Server,
+  ShieldCheck,
+  Star,
+  Wrench,
+} from "lucide-react";
+import type { ComponentType } from "react";
 
-import { motion, useScroll, useSpring } from "framer-motion";
-import Navigation from "@/components/portfolio/Navigation";
-import Hero from "@/components/portfolio/Hero";
-import About from "@/components/portfolio/About";
-import Skills from "@/components/portfolio/Skills";
-import Experience from "@/components/portfolio/Experience";
-import Projects from "@/components/portfolio/Projects";
-import Testimonials from "@/components/portfolio/Testimonials";
-import Contact from "@/components/portfolio/Contact";
-import Footer from "@/components/portfolio/Footer";
+const upworkUrl = "https://www.upwork.com/freelancers/~01e47a43df9cae032f";
+const githubUrl = "https://github.com/arifaslamdev";
+const portfolioUrl = "https://arifaslamdev.github.io";
+const emailUrl = "mailto:shohag0310@gmail.com";
+type Icon = ComponentType<{ className?: string }>;
 
-function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+const navItems = ["About", "Services", "Projects", "Skills", "Experience", "Testimonials", "Contact"];
+const heroStats = ["17+ Years Experience", ".NET Backend Specialist", "ERP & FinTech Systems", "SQL Optimization", "Production Systems", "Secure APIs & RBAC"];
+const expertise = ["Backend development", "API engineering", "Database design", "SQL optimization", "Clean architecture", "Production-ready systems"];
+const services: Array<{ icon: Icon; title: string; description: string }> = [
+  { icon: Server, title: ".NET Backend Development", description: "Reliable ASP.NET Core Web API backends, service layers, integrations, and maintainable C# business logic." },
+  { icon: Layers, title: "ERP System Development", description: "Inventory, sales, accounting, reporting, workflows, permissions, and business automation modules." },
+  { icon: ShieldCheck, title: "FinTech & Microfinance Systems", description: "Loan, savings, accounting, collection, transaction, reporting, and audit-friendly backend workflows." },
+  { icon: Gauge, title: "API Performance Optimization", description: "Endpoint review, EF Core tuning, query reduction, response improvements, and bottleneck removal." },
+  { icon: Database, title: "SQL Server & PostgreSQL Optimization", description: "Indexes, query plans, reporting queries, transactions, stored procedures, and database-heavy workloads." },
+  { icon: RefreshCw, title: "Legacy .NET Modernization", description: "Stabilize and modernize ASP.NET, Web API, and .NET Framework systems without unnecessary rewrites." },
+  { icon: Lock, title: "Secure API Development with JWT/RBAC", description: "Authentication, authorization, roles, permissions, claims, audit trails, and secure API boundaries." },
+  { icon: Wrench, title: "Backend Refactoring & Clean Architecture", description: "Clean up messy codebases using practical architecture, CQRS, MediatR, SOLID, and modular design." },
+];
+const problems = [
+  "Their .NET API is slow", "Their ERP system is incomplete", "Their SQL queries are slow", "Their legacy ASP.NET system is hard to maintain", "Their backend needs authentication, authorization, or RBAC", "Their financial system needs accurate transactions and reporting", "Their codebase needs cleanup and refactoring", "Their reports are slow or unreliable", "Their production system has stability issues",
+];
+const helpSteps = ["Review the existing system", "Identify bottlenecks", "Improve API/database performance", "Refactor backend code", "Build secure APIs", "Improve reporting and transaction accuracy", "Deliver stable production-ready solutions"];
+const projects = [
+  { category: "ERP Platform", title: "ERP System for Inventory, Sales & Financial Management", context: "Business operations needed connected inventory, sales, finance, access control, and reporting modules.", built: "A multi-module ERP backend with structured workflows, reporting, and database-driven business rules.", features: ["Inventory and sales", "Financial management", "Role-based access", "Operational reporting"], tech: [".NET 8", "C#", "SQL Server", "PostgreSQL", "CQRS"], value: "A more reliable operating system for daily business, finance, and reporting workflows." },
+  { category: "Logistics API", title: "Fleet Management API", context: "Logistics operations needed backend services for vehicle, driver, shift, order, delivery, and dashboards.", built: "A logistics backend platform with REST APIs, data models, reporting workflows, and frontend integration support.", features: ["Vehicle modules", "Driver workflows", "Shift and orders", "Dashboards"], tech: [".NET 8", "CQRS", "PostgreSQL", "React", "TypeScript"], value: "Improves operational visibility and creates a maintainable backend for delivery workflows." },
+  { category: "Secure Workflow", title: "Mission Management System", context: "Sensitive workflows required role-based access, approvals, task tracking, and audit-friendly APIs.", built: "A secure operations backend with workflow automation, team assignments, task timelines, and API integration.", features: ["RBAC", "Approvals", "Task tracking", "Audit-friendly flows"], tech: ["ASP.NET Core", "SQL Server", "REST API", "Entity Framework", "RBAC"], value: "Supports controlled operations where security, traceability, and workflow reliability matter." },
+  { category: "Microfinance ERP", title: "Microfinance ERP System", context: "Microfinance operations required reliable loans, savings, accounting, members, reports, and branch workflows.", built: "An end-to-end financial and organizational platform for transaction-heavy microfinance operations.", features: ["Loans and savings", "Member records", "Accounting", "Reports"], tech: [".NET", "SQL Server", "Oracle", "REST API", "EF Core"], value: "Improves transaction consistency, reporting reliability, and operational control." },
+  { category: "Financial API", title: "Microfinance Mobile API", context: "Field and mobile workflows needed secure API access to member, loan, savings, installment, and collection data.", built: "A secure financial services backend API connected to central microfinance data and reporting workflows.", features: ["Member APIs", "Loan data", "Installment tracking", "Transaction reports"], tech: [".NET", "ASP.NET Core Web API", "SQL Server", "Authentication", "REST API"], value: "Enables mobile operations through controlled API access while keeping data consistent." },
+  { category: "Business Automation", title: "Courier Management System", context: "Courier operations needed shift, driver, vehicle, order, delivery workflow, dashboard, and reporting modules.", built: "A business automation system using .NET 8 backend services with PostgreSQL and React/TypeScript support.", features: ["Shift modules", "Driver and vehicle", "Order workflows", "Reports"], tech: [".NET 8", "CQRS", "PostgreSQL", "React", "TypeScript"], value: "Helps logistics teams manage daily courier operations with cleaner workflows and visibility." },
+  { category: "Performance Fix", title: ".NET API Performance Optimization", context: "Existing .NET APIs and reporting workflows can become slow as data, users, and business rules grow.", built: "Endpoint review, SQL tuning, indexing, data access improvements, refactoring, and backend optimization.", features: ["Endpoint review", "SQL tuning", "Index improvements", "Refactoring"], tech: [".NET", "SQL Server", "PostgreSQL", "EF Core", "REST API"], value: "Improves API speed, reporting performance, and production stability without a full rewrite." },
+];
+const skillGroups = [
+  { title: "Backend", skills: ["C#", ".NET 8", ".NET Core", "ASP.NET Core", "Web API", "REST API", "EF Core", "Dapper"] },
+  { title: "Architecture", skills: ["Clean Architecture", "CQRS", "MediatR", "DDD", "Microservices", "SOLID", "Repository Pattern", "Modular Design"] },
+  { title: "Database", skills: ["SQL Server", "PostgreSQL", "Oracle", "MySQL", "Redis", "Database Design", "Query Optimization", "Reporting", "Transactions"] },
+  { title: "Security", skills: ["JWT", "OAuth", "RBAC", "Authentication", "Authorization", "Secure API Design", "Audit-Friendly Workflows"] },
+  { title: "Frontend", skills: ["React", "Angular", "TypeScript", "Vue.js", "Blazor", "Bootstrap"] },
+  { title: "DevOps", skills: ["Azure", "AWS", "Docker", "Git", "GitHub", "CI/CD", "NGINX", "Linux"] },
+];
+const secondarySkills = ["Java", "PHP", "Spring Boot", "Android"];
+const experiences = [
+  { role: "Software Engineering Manager", company: "Genie InfoTech", period: "May 2025 - Present", description: "Leading backend and full-stack development for business automation systems using .NET 8, CQRS, PostgreSQL, React, and TypeScript. Designed and delivered courier management modules for shift, driver, vehicle, order, delivery workflow, dashboards, and operational reporting.", highlights: [".NET 8 backend services", "CQRS and PostgreSQL", "Courier workflows", "Team leadership"] },
+  { role: "Senior Software Engineer Team Lead", company: "Shakti Foundation", period: "Mar 2023 - Apr 2025", description: "Led development of ERP, microfinance systems, mobile application APIs, reporting modules, business workflows, and production support. Worked with business, DevOps, QA, security, compliance, and UX teams.", highlights: ["ERP and microfinance", "Mobile APIs", "Reporting modules", "Production support"] },
+  { role: "Senior Software Engineer", company: "Shakti Foundation", period: "Oct 2016 - Feb 2023", description: "Developed and maintained ERP systems for microfinance, SME, health programs, audit, loan assessment, and support workflows. Focused on backend APIs, database-driven business logic, reporting, accounting, and transaction consistency.", highlights: ["Financial workflows", "Backend APIs", "Database logic", "Accounting and reports"] },
+  { role: "Software Engineer", company: "Shakti Foundation", period: "May 2010 - Sep 2016", description: "Developed and maintained features for Shakti ERP, health program modules, support ticketing, loan assessment workflows, and Android-based field applications while supporting production users.", highlights: ["ERP development", "Loan assessment", "Support workflows", "Production maintenance"] },
+  { role: "Programmer", company: "Honeycom Automation & Security Pvt. Ltd.", period: "Mar 2009 - Apr 2010", description: "Developed enterprise applications using ASP.NET, C#, Java, PHP, and database systems, with work across application features, database schemas, and technical support.", highlights: ["ASP.NET and C#", "Enterprise apps", "Database schemas", "Technical support"] },
+  { role: "Programmer", company: "ICEL Pvt. Ltd.", period: "Mar 2008 - Feb 2009", description: "Built enterprise applications from early requirements through production delivery, with exposure to research, real-time technologies, and end-to-end application development.", highlights: ["End-to-end development", "Enterprise apps", "R&D exposure", "Production delivery"] },
+];
+const testimonials = [
+  { role: "ASP.NET Bug Fixing", quote: "Arif is very skilled and efficient developer, honesty and straightforward communication is his top quality. The work was done very professionally to our full satisfaction with great cooperation.", badges: ["Committed to Quality", "Reliable", "Clear Communicator", "Professional", "Collaborative"] },
+  { role: "Fullstack Web Portal Development", quote: "Arif showed a lot of enthusiasm during the project. He is a Full Stack Developer and asp.net core, mssql Expert. He is also a good solution architect. He was extremely knowledgeable and delivered quality work on time.", badges: ["Clear Communicator", "Committed to Quality"] },
+];
+const feedbackTraits = ["Clear communicator", "Committed to quality", "Reliable", "Professional", "Collaborative"];
 
-  return (
-    <motion.div
-      style={{ scaleX }}
-      className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 origin-left z-[60]"
-    />
-  );
+function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description?: string }) {
+  return <div className="mx-auto mb-12 max-w-3xl text-center"><span className="eyebrow">{eyebrow}</span><h2 className="mt-5 text-balance text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl">{title}</h2>{description ? <p className="mt-4 text-base leading-7 text-slate-600 sm:text-lg">{description}</p> : null}</div>;
+}
+function PrimaryButton({ href, children }: { href: string; children: React.ReactNode }) {
+  return <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-[#071f35]">{children}</a>;
+}
+function SecondaryButton({ href, children }: { href: string; children: React.ReactNode }) {
+  return <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 bg-white/90 px-5 py-3 text-sm font-bold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:border-teal-300 hover:bg-teal-50 hover:text-teal-800">{children}</a>;
+}
+function Stars() {
+  return <div className="flex items-center gap-1 text-amber-400">{Array.from({ length: 5 }).map((_, index) => <Star key={index} className="h-4 w-4 fill-current" />)}</div>;
 }
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <ScrollProgress />
-      <Navigation />
-      <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <Projects />
-      <Testimonials />
-      <Contact />
-      <Footer />
+    <main className="min-h-screen bg-background text-foreground"><ScrollAnimations />
+      <header className="site-header sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 shadow-[0_8px_30px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+        <nav className="section-shell flex min-h-18 items-center justify-between gap-4 py-3">
+          <a href="#home" className="brand-link group flex min-w-0 items-center gap-3" aria-label="Arif Aslam home"><span className="navbar-logo"><Image src="/logo-arifaslamdev-new.png" alt="Arif Aslam Dev logo" width={44} height={44} className="h-full w-full object-cover" priority /></span><span className="min-w-0 leading-tight"><span className="block truncate font-bold text-slate-950 transition-colors group-hover:text-primary">Arif Aslam</span><span className="hidden text-xs font-medium text-slate-500 sm:block">Senior .NET Backend Developer</span></span></a>
+          <div className="hidden items-center gap-5 xl:flex">{navItems.map((item) => <a key={item} href={`#${item.toLowerCase()}`} className="nav-link text-sm font-semibold text-slate-600 transition hover:text-teal-700">{item}</a>)}</div>
+          <a href={upworkUrl} target="_blank" rel="noopener noreferrer" className="cta-soft inline-flex shrink-0 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-teal-900/10 transition hover:-translate-y-0.5 hover:bg-teal-700">Hire Me</a>
+        </nav>
+      </header>
+
+      <section id="home" className="relative isolate overflow-hidden bg-white">
+        <div className="hero-grid absolute inset-0 -z-10" /><div className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-teal-50/80 to-transparent" />
+        <div className="section-shell grid min-h-[calc(100vh-72px)] items-center gap-12 py-16 lg:grid-cols-[1.04fr_0.96fr] lg:py-20">
+          <div className="hero-copy"><span className="eyebrow">Freelance backend partner</span><h1 className="mt-6 max-w-4xl text-balance text-5xl font-bold tracking-[-0.04em] text-slate-950 sm:text-6xl lg:text-7xl">Senior .NET Backend Developer</h1><p className="mt-5 text-lg font-bold text-teal-700 sm:text-2xl">ERP &bull; FinTech &bull; Scalable APIs &bull; SQL Optimization</p><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">I help businesses build, fix, and scale reliable .NET backend systems for ERP, FinTech, Microfinance, SaaS, Logistics, and business automation platforms where performance, data accuracy, and reliability are critical.</p><div className="hero-actions mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap"><PrimaryButton href={upworkUrl}>Hire Me on Upwork <ExternalLink className="ml-2 h-4 w-4" /></PrimaryButton><SecondaryButton href={githubUrl}>View GitHub <ExternalLink className="ml-2 h-4 w-4" /></SecondaryButton><SecondaryButton href="#contact">Contact Me <ArrowRight className="ml-2 h-4 w-4" /></SecondaryButton></div></div>
+          <div className="hero-card premium-card relative overflow-hidden rounded-3xl p-6 sm:p-8"><div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[3rem] bg-gradient-to-bl from-teal-50 to-transparent" /><div className="relative"><div className="mb-8 max-w-md"><p className="text-sm font-bold uppercase tracking-[0.18em] text-teal-700">Backend focus</p><h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-950">Production systems, not just prototypes</h2></div><div className="hero-stats grid gap-3 sm:grid-cols-2">{heroStats.map((item, index) => <div key={item} className={`rounded-2xl border p-4 ${index === 0 ? "border-primary bg-primary text-white sm:col-span-2" : "border-slate-200 bg-white/82"}`}><CheckCircle2 className={`mb-3 h-5 w-5 ${index === 0 ? "text-teal-200" : "text-teal-600"}`} /><p className={`text-lg font-bold ${index === 0 ? "text-white" : "text-slate-950"}`}>{item}</p></div>)}</div><div className="hero-fit mt-6 rounded-2xl border border-teal-200 bg-teal-50 p-5"><p className="text-sm font-bold text-teal-900">Best fit projects</p><p className="mt-2 text-sm leading-6 text-teal-800">ERP, FinTech, Microfinance, API optimization, SQL performance, secure RBAC, reporting, accounting, and legacy .NET modernization.</p></div></div></div>
+        </div>
+      </section>
+      <section id="about" className="section-spacing">
+        <div className="section-shell"><SectionHeader eyebrow="About" title="Hands-on backend development for systems where reliability matters" /><div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]"><div className="premium-card rounded-3xl p-7 sm:p-9"><p className="text-xl font-semibold leading-9 text-slate-800">I have 17+ years of professional software development experience building production systems involving financial transactions, loan workflows, savings, accounting, inventory, reporting, APIs, and database-driven enterprise applications.</p><p className="mt-5 text-base leading-8 text-slate-600">My work is practical: build the backend, fix what is slow, optimize the database, modernize legacy .NET systems, clean up the codebase, and keep production systems stable. Architecture and system design support that delivery, but the core value is hands-on engineering.</p></div><div className="grid gap-3 sm:grid-cols-2">{expertise.map((item) => <div key={item} className="card-flat card-hover rounded-2xl p-5"><CheckCircle2 className="mb-4 h-5 w-5 text-teal-600" /><p className="font-bold text-slate-900">{item}</p></div>)}</div></div></div>
+      </section>
+
+      <section id="services" className="section-spacing bg-white">
+        <div className="section-shell"><SectionHeader eyebrow="Services" title="Backend services for companies that need stability, speed, and clean delivery" description="Each service is focused on a concrete client problem: slow APIs, incomplete ERP workflows, fragile legacy systems, secure access, transaction accuracy, or database performance." /><div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{services.map((service, index) => <article key={service.title} className="card-flat card-hover group relative overflow-hidden rounded-3xl p-6"><div className="absolute right-0 top-0 h-20 w-20 rounded-bl-[3rem] bg-slate-50 transition group-hover:bg-teal-50" /><div className="relative"><div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-700 ring-1 ring-teal-100"><service.icon className="h-5 w-5" /></div><p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate-400">0{index + 1}</p><h3 className="text-lg font-bold leading-6 text-slate-950">{service.title}</h3><p className="mt-3 text-sm leading-6 text-slate-600">{service.description}</p></div></article>)}</div></div>
+      </section>
+
+      <section className="section-spacing gradient-panel">
+        <div className="section-shell"><SectionHeader eyebrow="Problem Solving" title="When clients usually hire me" description="Clear diagnostic work first, targeted backend improvements second, production-ready delivery at the end." /><div className="grid gap-6 lg:grid-cols-2"><div className="premium-card rounded-3xl p-6 sm:p-8"><div className="mb-6 flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white"><Gauge className="h-5 w-5" /></span><div><h3 className="text-xl font-bold text-slate-950">Problems I step into</h3><p className="text-sm text-slate-500">Common reasons teams need backend help.</p></div></div><div className="space-y-3">{problems.map((problem) => <div key={problem} className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4"><ArrowRight className="mt-0.5 h-5 w-5 shrink-0 text-primary" /><p className="text-sm font-semibold leading-6 text-slate-700">{problem}</p></div>)}</div></div><div className="rounded-3xl border border-teal-200 bg-teal-900 p-6 text-white shadow-2xl shadow-teal-950/12 sm:p-8"><div className="mb-6 flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-400 text-teal-950"><Wrench className="h-5 w-5" /></span><div><h3 className="text-xl font-bold">How I help</h3><p className="text-sm text-teal-100">Practical path from review to production.</p></div></div><div className="space-y-3">{helpSteps.map((step) => <div key={step} className="flex gap-3 rounded-2xl border border-white/10 bg-white/8 p-4"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-teal-200" /><p className="text-sm font-semibold leading-6 text-teal-50">{step}</p></div>)}</div></div></div></div>
+      </section>
+
+      <section id="projects" className="section-spacing bg-white">
+        <div className="section-shell"><SectionHeader eyebrow="Featured Projects" title="Case-study style examples of backend and business system work" description="Each project shows business context, what was built, key features, stack, and value without inventing client names or inflated metrics." /><div className="grid gap-6 lg:grid-cols-2">{projects.map((project, index) => <article key={project.title} className="card-flat card-hover overflow-hidden rounded-3xl"><div className="border-b border-slate-200 bg-slate-50/75 p-6"><div className="flex items-start justify-between gap-4"><div><span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-teal-700 ring-1 ring-teal-100">{project.category}</span><h3 className="mt-4 text-2xl font-bold tracking-tight text-slate-950">{project.title}</h3></div><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-white">{index + 1}</span></div></div><div className="space-y-5 p-6"><div className="rounded-2xl border border-teal-100 bg-teal-50 p-4"><p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-700">Problem / business context</p><p className="mt-2 text-sm font-semibold leading-6 text-teal-950">{project.context}</p></div><div><p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">What was built</p><p className="mt-2 text-sm leading-7 text-slate-600">{project.built}</p></div><div><p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Key features</p><div className="mt-3 grid gap-2 sm:grid-cols-2">{project.features.map((feature) => <div key={feature} className="flex gap-2 rounded-xl bg-slate-50 p-3 text-sm font-semibold text-slate-700"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" />{feature}</div>)}</div></div><div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Business value</p><p className="mt-2 text-sm leading-6 text-slate-700">{project.value}</p></div><div className="flex flex-wrap gap-2">{project.tech.map((item) => <span key={item} className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm">{item}</span>)}</div></div></article>)}</div></div>
+      </section>
+      <section id="skills" className="section-spacing">
+        <div className="section-shell"><SectionHeader eyebrow="Skills" title="Technical stack grouped by delivery area" description="The primary focus is .NET backend engineering, database performance, secure APIs, and production-ready business systems. Frontend support is available when needed." /><div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">{skillGroups.map((group) => <article key={group.title} className="premium-card rounded-3xl p-6"><div className="mb-5 flex items-center justify-between gap-4"><h3 className="text-xl font-bold text-slate-950">{group.title}</h3><span className="h-2 w-2 rounded-full bg-teal-500" /></div><div className="flex flex-wrap gap-2">{group.skills.map((skill) => <span key={skill} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm">{skill}</span>)}</div></article>)}</div><div className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"><p className="text-sm font-bold uppercase tracking-[0.14em] text-slate-400">Secondary / additional experience</p><div className="mt-4 flex flex-wrap gap-2">{secondarySkills.map((skill) => <span key={skill} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600">{skill}</span>)}</div></div></div>
+      </section>
+
+      <section id="experience" className="section-spacing bg-white">
+        <div className="section-shell"><SectionHeader eyebrow="Experience" title="17+ years across production software roles" description="A scannable timeline focused on backend systems, ERP, microfinance, APIs, database work, reporting, production support, modernization, and leadership." /><div className="relative space-y-6 before:absolute before:left-5 before:top-5 before:hidden before:h-[calc(100%-40px)] before:w-px before:bg-slate-200 md:before:block">{experiences.map((experience, index) => <article key={`${experience.role}-${experience.period}`} className="relative md:pl-14"><span className="absolute left-0 top-7 hidden h-10 w-10 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-white shadow-lg shadow-slate-900/10 md:flex">{index + 1}</span><div className="card-flat card-hover rounded-3xl p-6 sm:p-8"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h3 className="text-xl font-bold text-slate-950">{experience.role}</h3><p className="mt-1 flex items-center gap-2 font-bold text-teal-700"><BriefcaseBusiness className="h-4 w-4" />{experience.company}</p></div><p className="flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600"><Calendar className="h-4 w-4" />{experience.period}</p></div><p className="mt-5 text-base leading-8 text-slate-600">{experience.description}</p><div className="mt-5 flex flex-wrap gap-2">{experience.highlights.map((highlight) => <span key={highlight} className="rounded-full bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-700 ring-1 ring-teal-100">{highlight}</span>)}</div></div></article>)}</div></div>
+      </section>
+
+      <section id="testimonials" className="section-spacing">
+        <div className="section-shell"><SectionHeader eyebrow="Client Feedback" title="What clients say about working with me" description="Reused from existing Upwork feedback on the current portfolio. No invented client names or testimonials." /><div className="grid gap-6 lg:grid-cols-[1fr_0.82fr]"><div className="grid gap-6">{testimonials.map((testimonial) => <article key={testimonial.role} className="premium-card rounded-3xl p-6 sm:p-8"><div className="mb-5 flex items-center justify-between gap-4"><Stars /><Quote className="h-8 w-8 text-teal-200" /></div><blockquote className="text-lg font-semibold leading-8 text-slate-800">&ldquo;{testimonial.quote}&rdquo;</blockquote><div className="mt-6 flex flex-wrap gap-2">{testimonial.badges.map((badge) => <span key={badge} className="rounded-full bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-700 ring-1 ring-teal-100">{badge}</span>)}</div><p className="mt-5 text-sm font-bold text-slate-500">Satisfied Client - Upwork / {testimonial.role}</p></article>)}</div><aside className="rounded-3xl border border-teal-200 bg-teal-900 p-6 text-white shadow-2xl shadow-teal-950/12 sm:p-8"><p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-200">Client insights</p><div className="mt-6 grid gap-4"><div className="rounded-2xl bg-white/10 p-5"><Stars /><p className="mt-3 text-4xl font-bold">5.0</p><p className="mt-1 text-sm text-teal-100">Rating shown in existing feedback</p></div>{feedbackTraits.map((trait) => <div key={trait} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/8 p-4"><CheckCircle2 className="h-5 w-5 text-teal-200" /><span className="text-sm font-semibold text-teal-50">{trait}</span></div>)}</div></aside></div></div>
+      </section>
+
+      <section id="contact" className="section-spacing">
+        <div className="section-shell"><div className="relative overflow-hidden rounded-[2rem] bg-primary p-8 text-white shadow-2xl shadow-slate-900/18 sm:p-10 lg:p-12"><div className="absolute right-0 top-0 h-64 w-64 rounded-bl-[6rem] bg-teal-400/18" /><div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center"><div><span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-teal-100">Project discussion</span><h2 className="mt-5 max-w-3xl text-balance text-3xl font-bold tracking-tight sm:text-5xl">Need help with a .NET backend, ERP, FinTech system, API, or database performance issue?</h2><p className="mt-5 max-w-2xl text-base leading-8 text-slate-200">Let&apos;s discuss your project and the backend outcome you need: faster APIs, cleaner code, secure access, accurate reporting, and a more stable production system.</p></div><div className="flex flex-col gap-3 sm:flex-row lg:flex-col"><a href={upworkUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-teal-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-teal-400">Hire Me on Upwork <ExternalLink className="ml-2 h-4 w-4" /></a><a href={githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-bold text-primary transition hover:-translate-y-0.5 hover:bg-slate-100">View GitHub <ExternalLink className="ml-2 h-4 w-4" /></a><a href={emailUrl} className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/30 px-5 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-white/10">Email Me <Mail className="ml-2 h-4 w-4" /></a></div></div><div className="relative mt-9 flex flex-wrap gap-3 border-t border-white/15 pt-6 text-sm text-slate-200"><a href={portfolioUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white">Portfolio: arifaslamdev.github.io</a><span className="hidden sm:inline">/</span><a href={emailUrl} className="hover:text-white">Email: shohag0310@gmail.com</a></div></div></div>
+      </section>
+
+      <footer className="border-t border-slate-200 bg-white py-8"><div className="section-shell flex flex-col items-center justify-between gap-4 text-sm text-slate-600 sm:flex-row"><p>&copy; 2026 Arif Aslam. Senior .NET Backend Developer.</p><div className="flex gap-4"><a href={upworkUrl} target="_blank" rel="noopener noreferrer" className="font-bold hover:text-teal-700">Upwork</a><a href={githubUrl} target="_blank" rel="noopener noreferrer" className="font-bold hover:text-teal-700">GitHub</a><a href={emailUrl} className="font-bold hover:text-teal-700">Email</a></div></div></footer>
     </main>
   );
 }
+
+
+
+
+
+
+

@@ -1,51 +1,38 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from "sonner";
-import ThemeProviderWrapper from "@/components/providers/ThemeProviderWrapper";
+﻿import type { Metadata } from "next";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Md Arif A. | Senior .NET Backend Architect - ERP, FinTech & Scalable Systems",
+  title: "Arif Aslam | Senior .NET Backend Developer | ERP, FinTech & APIs",
   description:
-    "Senior .NET Backend Architect with 13+ years of experience in ERP, FinTech, and SaaS applications. Specializing in microservices, clean architecture, and scalable backend systems. Based in Bangladesh, serving clients worldwide.",
+    "Senior .NET Backend Developer with 17+ years of professional software development experience in ERP, FinTech, Microfinance, ASP.NET Core Web API, SQL Server, PostgreSQL, Clean Architecture, scalable APIs, and database optimization.",
   keywords: [
-    "Md Arif",
+    "Arif Aslam",
+    "Senior .NET Backend Developer",
     ".NET Developer",
-    "Backend Architect",
     "ERP Developer",
-    "FinTech",
-    "Microservices",
-    "C# Developer",
-    "ASP.NET Core",
-    "Software Engineer",
-    "Bangladesh",
-    "Full Stack Developer",
-    "SQL Server",
-    "PostgreSQL",
+    "FinTech Developer",
+    "Microfinance Software",
+    "ASP.NET Core Web API",
+    "SQL Server Optimization",
+    "PostgreSQL Optimization",
+    "Clean Architecture",
+    "CQRS",
+    "RBAC",
+    "Legacy .NET Modernization",
   ],
-  authors: [{ name: "Md Arif A." }],
+  authors: [{ name: "Arif Aslam" }],
   openGraph: {
-    title: "Md Arif A. | Senior .NET Backend Architect",
+    title: "Arif Aslam | Senior .NET Backend Developer",
     description:
-      "13+ years building production systems for ERP, FinTech & SaaS. Expert in scalable backend architecture, microservices, and clean code.",
-    siteName: "Md Arif A. - Portfolio",
+      "17+ years building, fixing, and scaling production .NET backend systems for ERP, FinTech, Microfinance, SaaS, APIs, and database-heavy business systems.",
+    siteName: "Arif Aslam Portfolio",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Md Arif A. | Senior .NET Backend Architect",
+    title: "Arif Aslam | Senior .NET Backend Developer",
     description:
-      "13+ years building production systems for ERP, FinTech & SaaS. Expert in scalable backend architecture, microservices, and clean code.",
+      "Senior .NET Backend Developer focused on ERP, FinTech, scalable APIs, SQL optimization, and production backend systems.",
   },
 };
 
@@ -55,12 +42,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-      >
-        <ThemeProviderWrapper children={children} />
-      </body>
+    <html lang="en">
+      <body>{children}</body>
     </html>
   );
 }

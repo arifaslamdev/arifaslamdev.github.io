@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,10 +10,11 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "How I Help", href: "#problems" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -28,26 +30,21 @@ export default function Navigation() {
       const sections = navItems.map((item) => item.href.replace("#", ""));
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i]);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 120) {
-            setActiveSection(sections[i]);
-            break;
-          }
+        if (el && el.getBoundingClientRect().top <= 120) {
+          setActiveSection(sections[i]);
+          break;
         }
       }
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -57,77 +54,72 @@ export default function Navigation() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          isScrolled
-            ? "glass-strong shadow-lg shadow-black/20"
-            : "bg-transparent"
+          "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
+          isScrolled ? "glass-strong shadow-lg shadow-black/20" : "bg-transparent"
         )}
       >
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
+        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between lg:h-20">
             <motion.a
               href="#home"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick("#home");
               }}
-              className="flex items-center gap-2 group"
+              className="flex items-center gap-3 group"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-                <span className="text-emerald-400 font-bold text-lg font-mono">
-                  <img  src="/logo_arifaslamdev.jpg" alt="Logo" className="w-6 h-6" />
-                </span>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-emerald-500/20 bg-emerald-500/10 transition-colors group-hover:bg-emerald-500/20">
+                <Image src="/logo_arifaslamdev.jpg" alt="Arif Aslam logo" width={24} height={24} className="rounded-sm" />
               </div>
-              <span className="text-lg font-semibold text-foreground hidden sm:block">
-                Md Arif Aslam
-              </span>
+              <div className="hidden sm:block">
+                <span className="block text-base font-semibold text-foreground">Arif Aslam</span>
+                <span className="block text-xs text-muted-foreground">Senior .NET Backend Developer</span>
+              </div>
             </motion.a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.href);
-                  }}
-                  className={cn(
-                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative",
-                    activeSection === item.href.replace("#", "")
-                      ? "text-emerald-400"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {activeSection === item.href.replace("#", "") && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 bg-emerald-500/10 rounded-lg border border-emerald-500/20"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{item.label}</span>
-                </a>
-              ))}
+            <div className="hidden items-center gap-1 xl:flex">
+              {navItems.map((item) => {
+                const section = item.href.replace("#", "");
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item.href);
+                    }}
+                    className={cn(
+                      "relative rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                      activeSection === section
+                        ? "text-emerald-400"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {activeSection === section && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute inset-0 rounded-lg border border-emerald-500/20 bg-emerald-500/10"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{item.label}</span>
+                  </a>
+                );
+              })}
             </div>
 
-            {/* CTA Button */}
-            <div className="hidden lg:block">
-              <Button
-                onClick={() => handleNavClick("#contact")}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-6 rounded-lg shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition-all duration-300"
-              >
-                Hire Me
+            <div className="hidden lg:flex items-center gap-3">
+              <Button asChild className="rounded-lg bg-emerald-500 px-5 font-medium text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600">
+                <a href="https://www.upwork.com/freelancers/~01e47a43df9cae032f" target="_blank" rel="noopener noreferrer">
+                  Hire on Upwork
+                </a>
               </Button>
             </div>
 
-            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground xl:hidden"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -136,7 +128,6 @@ export default function Navigation() {
         </nav>
       </motion.header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -144,13 +135,10 @@ export default function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 pt-20 lg:hidden"
+            className="fixed inset-0 z-40 pt-20 xl:hidden"
           >
-            <div
-              className="absolute inset-0 bg-background/90 backdrop-blur-xl"
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-            <nav className="relative max-w-7xl mx-auto px-4 py-6">
+            <div className="absolute inset-0 bg-background/90 backdrop-blur-xl" onClick={() => setIsMobileMenuOpen(false)} />
+            <nav className="relative mx-auto max-w-7xl px-4 py-6">
               <div className="glass rounded-2xl p-4 space-y-1">
                 {navItems.map((item, index) => (
                   <motion.a
@@ -162,30 +150,22 @@ export default function Navigation() {
                     }}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    transition={{ delay: index * 0.04 }}
                     className={cn(
-                      "block px-4 py-3 rounded-xl text-base font-medium transition-all",
+                      "block rounded-xl px-4 py-3 text-base font-medium transition-all",
                       activeSection === item.href.replace("#", "")
-                        ? "text-emerald-400 bg-emerald-500/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                        ? "bg-emerald-500/10 text-emerald-400"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     )}
                   >
                     {item.label}
                   </motion.a>
                 ))}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navItems.length * 0.05 }}
-                  className="pt-2"
-                >
-                  <Button
-                    onClick={() => handleNavClick("#contact")}
-                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl"
-                  >
-                    Hire Me
-                  </Button>
-                </motion.div>
+                <Button asChild className="mt-3 w-full rounded-xl bg-emerald-500 font-medium text-white hover:bg-emerald-600">
+                  <a href="https://www.upwork.com/freelancers/~01e47a43df9cae032f" target="_blank" rel="noopener noreferrer">
+                    Hire Me on Upwork
+                  </a>
+                </Button>
               </div>
             </nav>
           </motion.div>

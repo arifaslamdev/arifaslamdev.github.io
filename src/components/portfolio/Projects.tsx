@@ -1,284 +1,180 @@
 "use client";
 
-import { motion, useInView, type Variants } from "framer-motion";
-import { useRef, useState } from "react";
-import {
-  ExternalLink,
-  ArrowRight,
-  Layers,
-  BarChart3,
-  Truck,
-  Shield,
-  Landmark,
-  Smartphone,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { motion, useInView, type Variants } from "framer-motion";
+import { useRef } from "react";
+import { BarChart3, DatabaseZap, Landmark, Layers, ShieldCheck, Smartphone, Truck } from "lucide-react";
 
 interface Project {
   title: string;
-  subtitle: string;
-  description: string;
-  image: string;
-  tags: string[];
-  icon: React.ComponentType<{ className?: string }>;
   category: string;
-  highlights: string[];
+  image: string;
+  icon: React.ComponentType<{ className?: string }>;
+  problem: string;
+  features: string[];
+  stack: string[];
+  value: string;
 }
 
 const projects: Project[] = [
   {
-    title: "ERP System for Inventory, Sales & Financial Management",
-    subtitle: "Multi-Module Enterprise Platform",
-    description:
-      "A comprehensive enterprise resource planning system covering finance, inventory, HR, and reporting modules. Built with modular architecture supporting multi-tenant operations across organizational departments.",
-    image: "/project-erp.jpg",
-    tags: [".NET 8", "C#", "SQL Server", "React", "CQRS", "PostgreSQL"],
-    icon: Layers,
+    title: "Microfinance ERP System",
+    category: "Microfinance ERP",
+    image: "/project-microfinance.jpg",
+    icon: Landmark,
+    problem: "Microfinance operations needed reliable handling for loans, deposits, accounting, reporting, and branch-level business workflows.",
+    features: ["Loan and deposit workflows", "Accounting and transaction records", "Reporting and audit support", "Branch and user access control"],
+    stack: ["C#", ".NET Framework", "ASP.NET MVC", "SQL Server", "Oracle", "Entity Framework"],
+    value: "Improved operational control for financial workflows where transaction accuracy and reporting reliability matter.",
+  },
+  {
+    title: "Microfinance Mobile API",
+    category: "FinTech API",
+    image: "/project-microfinance.jpg",
+    icon: Smartphone,
+    problem: "Field and mobile workflows required secure backend APIs for microfinance data access, loan activities, and operational updates.",
+    features: ["REST API endpoints", "Secure authentication", "Loan workflow support", "Database-backed mobile operations"],
+    stack: ["C#", "ASP.NET Web API", "SQL Server", "JWT", "Entity Framework"],
+    value: "Enabled mobile teams to work with central business data through controlled and maintainable backend APIs.",
+  },
+  {
+    title: "ERP System for Inventory, Sales & Accounting",
     category: "ERP",
-    highlights: [
-      "Multi-module finance & inventory management",
-      "Real-time reporting dashboards",
-      "Role-based access control system",
-    ],
+    image: "/project-erp.jpg",
+    icon: Layers,
+    problem: "Business operations needed a modular ERP backend covering stock, sales, financial records, reporting, and role-based workflows.",
+    features: ["Inventory and sales modules", "Accounting workflows", "Role-based access", "Operational reports"],
+    stack: [".NET 8", "ASP.NET Core Web API", "CQRS", "PostgreSQL", "React", "TypeScript"],
+    value: "Created a more structured platform for business automation, reporting, and day-to-day operational control.",
   },
   {
     title: "Fleet Management API",
-    subtitle: "Enterprise Logistics Platform",
-    description:
-      "A complete fleet management system optimizing delivery operations with modules for Shift, Driver, Vehicle, and Order Management. Features real-time tracking and route optimization.",
-    image: "/project-fleet.jpg",
-    tags: [".NET 8", "C#", "React", "TypeScript", "PostgreSQL", "REST API"],
-    icon: Truck,
     category: "Logistics",
-    highlights: [
-      "Real-time vehicle tracking & route optimization",
-      "Driver & shift management modules",
-      "Responsive React + TypeScript frontend",
-    ],
+    image: "/project-fleet.jpg",
+    icon: Truck,
+    problem: "Logistics teams needed backend services for drivers, vehicles, shifts, orders, delivery operations, and operational visibility.",
+    features: ["Driver and vehicle management", "Shift and order modules", "REST API integration", "Operational dashboards"],
+    stack: [".NET 8", "ASP.NET Core", "PostgreSQL", "React", "TypeScript", "REST API"],
+    value: "Supported logistics operations with maintainable APIs and structured data flows for fleet and order management.",
   },
   {
-    title: "Mission Management System",
-    subtitle: "Secure Workflow & Operations Backend",
-    description:
-      "A secure mission management system with workflow automation, team assignments, and operation timelines. Built with emphasis on security, audit trails, and compliance.",
+    title: "Mission Management Backend",
+    category: "Secure Backend",
     image: "/project-mission.jpg",
-    tags: [".NET Core", "C#", "SQL Server", "Entity Framework", "REST API"],
-    icon: Shield,
-    category: "Security",
-    highlights: [
-      "Secure workflow & operations management",
-      "Comprehensive audit trail system",
-      "Team collaboration & task assignments",
-    ],
+    icon: ShieldCheck,
+    problem: "Mission-critical workflows required a secure backend for task management, assignments, audit trails, and controlled access.",
+    features: ["Workflow and assignment APIs", "Audit trail support", "Secure access control", "Operational timeline tracking"],
+    stack: ["ASP.NET Core", "C#", "SQL Server", "Entity Framework", "REST API", "Azure"],
+    value: "Delivered backend structure for sensitive workflows where security, traceability, and reliability are required.",
   },
   {
-    title: "Microfinance ERP System",
-    subtitle: "End-to-End Financial & Organizational Platform",
-    description:
-      "A full-scale microfinance management system handling loans, deposits, accounting, and financial transactions. Ensuring data accuracy and compliance with financial regulations.",
-    image: "/project-microfinance.jpg",
-    tags: [".NET Framework", "C#", "SQL Server", "Oracle", "ASP.NET MVC"],
-    icon: Landmark,
-    category: "FinTech",
-    highlights: [
-      "Loan & deposit management lifecycle",
-      "Transaction accuracy & audit compliance",
-      "Multi-branch organizational support",
-    ],
+    title: ".NET API Performance Optimization",
+    category: "Performance",
+    image: "/project-erp.jpg",
+    icon: DatabaseZap,
+    problem: "Existing .NET APIs and database-heavy reports can become slow, unstable, and hard to maintain as business data grows.",
+    features: ["Endpoint and query review", "EF Core and SQL tuning", "Index and reporting improvements", "Code cleanup and refactoring"],
+    stack: ["ASP.NET Core", "EF Core", "Dapper", "SQL Server", "PostgreSQL", "Clean Architecture"],
+    value: "Helps teams reduce slow responses, improve database usage, and stabilize production backend systems without rewriting everything.",
   },
 ];
 
-const categories = ["All", "ERP", "FinTech", "Logistics", "Security"];
-
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 },
-  },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-  },
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  const filteredProjects =
-    activeCategory === "All"
-      ? projects
-      : projects.filter((p) => p.category === activeCategory);
 
   return (
     <section id="projects" className="section-padding relative" ref={ref}>
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/[0.02] to-transparent" />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.018] to-transparent" />
+      <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="mx-auto mb-14 max-w-3xl text-center"
         >
-          <motion.span className="inline-block text-emerald-400 text-sm font-semibold tracking-wider uppercase mb-4 px-4 py-2 rounded-full glass">
-            Portfolio
-          </motion.span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-            Featured <span className="gradient-text">Projects</span>
+          <span className="mb-4 inline-block rounded-full glass px-4 py-2 text-sm font-semibold uppercase tracking-wider text-emerald-400">
+            Featured Projects
+          </span>
+          <h2 className="mb-5 text-3xl font-bold sm:text-4xl lg:text-5xl">
+            Backend systems for <span className="gradient-text">real business operations</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            A selection of enterprise-grade systems I&apos;ve architected and
-            delivered for real-world business operations.
+          <p className="text-lg leading-relaxed text-muted-foreground">
+            Representative projects across ERP, FinTech, Microfinance, logistics, secure APIs, and database optimization.
           </p>
         </motion.div>
 
-        {/* Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap gap-3 justify-center mb-12"
-        >
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-5 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                activeCategory === category
-                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
-                  : "glass text-muted-foreground hover:text-foreground hover:border-emerald-500/30"
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Projects Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid md:grid-cols-2 gap-6 lg:gap-8"
+          className="grid gap-6 lg:grid-cols-2"
         >
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              variants={itemVariants}
-              layout
-              className="glass rounded-2xl overflow-hidden group hover:glow-emerald transition-all duration-500"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {/* Project Image */}
-              <div className="relative h-48 sm:h-56 overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-                
-                {/* Category Badge */}
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1.5 rounded-lg bg-emerald-500/20 backdrop-blur-md text-emerald-400 text-xs font-semibold border border-emerald-500/20">
-                    {project.category}
-                  </span>
+          {projects.map((project) => (
+            <motion.article key={project.title} variants={itemVariants} className="overflow-hidden rounded-2xl border border-border/60 bg-card/70 transition-all duration-300 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/10">
+              <div className="relative h-52 overflow-hidden">
+                <Image src={project.image} alt={project.title} fill className="object-cover transition-transform duration-700 hover:scale-105" sizes="(max-width: 1024px) 100vw, 50vw" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
+                <div className="absolute left-5 top-5 rounded-lg border border-emerald-500/20 bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-300 backdrop-blur-md">
+                  {project.category}
                 </div>
-
-                {/* Icon */}
-                <div className="absolute top-4 right-4 w-10 h-10 rounded-xl glass flex items-center justify-center">
-                  <project.icon className="w-5 h-5 text-emerald-400" />
+                <div className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-xl glass">
+                  <project.icon className="h-5 w-5 text-emerald-400" />
                 </div>
-
-                {/* Hover overlay */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                  className="absolute inset-0 bg-emerald-500/10 flex items-center justify-center transition-opacity duration-300"
-                >
-                  <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center">
-                    <ExternalLink className="w-5 h-5 text-white" />
-                  </div>
-                </motion.div>
               </div>
 
-              {/* Project Info */}
               <div className="p-6">
-                <h3 className="text-lg font-bold text-foreground group-hover:text-emerald-400 transition-colors line-clamp-2">
-                  {project.title}
-                </h3>
-                <p className="text-emerald-400/70 text-sm font-medium mt-1">
-                  {project.subtitle}
-                </p>
-                <p className="text-muted-foreground text-sm mt-3 leading-relaxed line-clamp-3">
-                  {project.description}
-                </p>
+                <h3 className="mb-4 text-xl font-bold text-foreground">{project.title}</h3>
 
-                {/* Highlights */}
-                <ul className="mt-4 space-y-1.5">
-                  {project.highlights.map((highlight, hIndex) => (
-                    <li
-                      key={hIndex}
-                      className="flex items-center gap-2 text-xs text-muted-foreground"
-                    >
-                      <span className="w-1 h-1 rounded-full bg-emerald-400/60" />
-                      {highlight}
-                    </li>
-                  ))}
-                </ul>
+                <div className="space-y-5">
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">Problem solved</p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{project.problem}</p>
+                  </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mt-5 pt-5 border-t border-border/50">
-                  {project.tags.map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="px-2.5 py-1 rounded-lg bg-secondary text-xs text-muted-foreground font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">Key features</p>
+                    <ul className="grid gap-2 sm:grid-cols-2">
+                      {project.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2 text-sm text-muted-foreground">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400/70" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">Tech stack</p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.stack.map((tag) => (
+                        <span key={tag} className="rounded-lg bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-border/60 bg-secondary/35 p-4">
+                    <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+                      <BarChart3 className="h-4 w-4" /> Business value
+                    </p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{project.value}</p>
+                  </div>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
-        </motion.div>
-
-        {/* View More Link */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-12"
-        >
-          <Button
-            variant="outline"
-            className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 rounded-xl px-8 group"
-            onClick={() =>
-              window.open(
-                "https://github.com/arifaslamdev",
-                "_blank",
-                "noopener,noreferrer"
-              )
-            }
-          >
-            View All Projects on GitHub
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
         </motion.div>
       </div>
     </section>
